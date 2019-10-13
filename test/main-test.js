@@ -144,4 +144,93 @@ describe('pos', () => {
     expect(result).toEqual(expected);
   });
 
+  it('should return grand total of items without promotions when receiptItems is provided to calculateReceiptTotal', () => {
+    const receiptItems = [{
+      barcode: 'ITEM000001',
+      name: 'Sprite',
+      price: 3.00,
+      unit: 'bottle',
+      count: 2,
+      subtotal: 6.00
+    },
+    {
+      barcode: 'ITEM000002',
+      name: 'Apple',
+      price: 5.50,
+      unit: 'pound',
+      count: 2,
+      subtotal: 11.00
+    }];
+
+    const result = calculateReceiptTotal(receiptItems);
+
+    const expected = {
+      receiptItems: [{
+        barcode: 'ITEM000001',
+        name: 'Sprite',
+        price: 3.00,
+        unit: 'bottle',
+        count: 2,
+        subtotal: 6.00
+      },
+      {
+        barcode: 'ITEM000002',
+        name: 'Apple',
+        price: 5.50,
+        unit: 'pound',
+        count: 2,
+        subtotal: 11.00
+      }],
+      total: 17.00
+    };
+
+    expect(result).toEqual(expected);
+  });
+
+  it('should return grand total of items with savings when promoted receiptItems is provided to calculateReceiptSavings', () => {
+    const receipt = {
+      receiptItems: [{
+        barcode: 'ITEM000001',
+        name: 'Sprite',
+        price: 3.00,
+        unit: 'bottle',
+        count: 3,
+        subtotal: 6.00
+      },
+      {
+        barcode: 'ITEM000002',
+        name: 'Apple',
+        price: 5.50,
+        unit: 'pound',
+        count: 2,
+        subtotal: 11.00
+      }],
+      total: 17.00
+    };
+
+    const result = calculateReceiptSavings(receipt);
+
+    const expected = {
+      receiptItems: [{
+        barcode: 'ITEM000001',
+        name: 'Sprite',
+        price: 3.00,
+        unit: 'bottle',
+        count: 3,
+        subtotal: 6.00
+      },
+      {
+        barcode: 'ITEM000002',
+        name: 'Apple',
+        price: 5.50,
+        unit: 'pound',
+        count: 2,
+        subtotal: 11.00
+      }],
+      total: 17.00,
+      savings: 3.00
+    };
+
+    expect(result).toEqual(expected);
+  });
 });
