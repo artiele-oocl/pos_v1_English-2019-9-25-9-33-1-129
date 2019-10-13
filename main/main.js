@@ -32,9 +32,35 @@ function combineItems(decodedBarcodes) {
         });
 }
 function loadItems(decodedBarcodes) {
-    const allLoadedItems = loadAllItems();
-    const loadItems = (item) => {
-        return allLoadedItems.find(loadItem => loadItem.barcode === item.barcode);
-    }
-    return decodedBarcodes.map(loadItems);
+    return decodedBarcodes.map((item) => {
+        return loadAllItems().find(loadItem => loadItem.barcode === item.barcode);
+    });
+}
+function calculateReceipt(items) {
+    return calculateReceiptSavings(calculateReceiptTotal(calculateReceiptItems(items)));
+}
+function calculateReceiptSavings(receiptItems) {
+    let TotalWithoutPromotion = 0;
+    receiptItems.receiptItems.map(item => TotalWithoutPromotion += (item.price * item.count));
+    receiptItems.savings = TotalWithoutPromotion - receiptItems.total;
+    return receiptItems;
+}
+function calculateReceiptTotal(receiptItems) {
+    let total = receiptItems.reduce((total, item) => {
+        return total + item.subtotal;
+    }, 0);
+    return {
+        receiptItems: receiptItems,
+        total: total
+    };
+}
+function calculateReceiptItems(items) {
+    items.forEach(item => { item.subtotal = item.price * item.count });
+    return promoteReceiptItems(items);
+}
+function promoteReceiptItems(items) {
+    items.forEach(item => {
+        if (loadPromotions()[0].barcodes.includes(item.barcode) && item.count > 2) item.subtotal -= item.price;
+    });
+    return items;
 }
