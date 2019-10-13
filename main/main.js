@@ -32,7 +32,9 @@ function combineItems(decodedBarcodes) {
         });
 }
 function loadItems(decodedBarcodes) {
-    return decodedBarcodes.map((item) => {
-        return loadAllItems().find(loadItem => item.barcode === loadItem.barcode);
-    });
+    const allLoadedItems = loadAllItems();
+    const loadItems = (item) => {
+        return allLoadedItems.find(loadItem => loadItem.barcode === item.barcode);
+    }
+    return decodedBarcodes.map(loadItems);
 }
