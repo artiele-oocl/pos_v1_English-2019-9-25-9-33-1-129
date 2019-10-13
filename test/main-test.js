@@ -19,8 +19,7 @@ describe('pos', () => {
 
     printReceipt(tags);
 
-    const expected =
-      '***<store earning no money>Receipt ***\n' +
+    const expected = '***<store earning no money>Receipt ***\n' +
       'Name: Sprite, Quantity: 5 bottles, Unit: 3.00(yuan), Subtotal: 12.00(yuan)\n' +
       'Name: Litchi, Quantity: 2.5 pounds, Unit: 15.00(yuan), Subtotal: 37.50(yuan)\n' +
       'Name: Instant Noodles, Quantity: 3 bags, Unit: 4.50(yuan), Subtotal: 9.00(yuan)\n' +

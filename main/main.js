@@ -1,5 +1,28 @@
 'use strict';
 
+function printReceipt(tags) {
+    console.log(renderReceipt(calculateReceipt(decodeTags(tags))));
+}
+
+function renderReceipt(receipt) {
+    let formattedReceipt = "";
+    formattedReceipt +=
+        '***<store earning no money>Receipt ***\n' +
+        getFinalReceipt(receipt) +
+        '----------------------\n' +
+        `Total: ${receipt.total.toFixed(2)}(yuan)\n` +
+        `Discounted prices: ${receipt.savings.toFixed(2)}(yuan)\n` +
+        '**********************';
+    return formattedReceipt;
+}
+
+function getFinalReceipt(receipt) {
+    let displayFinalReceipt = "";
+    receipt.receiptItems.forEach(items => {
+        displayFinalReceipt += `Name: ${items.name}, Quantity: ${items.count} ${items.unit}s, Unit: ${items.price.toFixed(2)}(yuan), Subtotal: ${items.subtotal.toFixed(2)}(yuan)\n`;
+    });
+    return displayFinalReceipt;
+}
 function decodeTags(tags) {
     return combineItems(decodeBarcodes(tags));
 }
@@ -25,11 +48,12 @@ function splitBarcodes(tag) {
     };
 }
 function combineItems(decodedBarcodes) {
-    return loadItems(decodedBarcodes)
-        .forEach(loadedItem => {
-            let decodedItemCount = decodedBarcodes.find(item => item.barcode === loadedItem.barcode);
-            loadedItem.count = decodedItemCount.count;
-        });
+    let loadedItems = loadItems(decodedBarcodes);
+    loadedItems.forEach(loadedItem => {
+        let decodedItem = decodedBarcodes.find(item => item.barcode === loadedItem.barcode);
+        loadedItem.count = decodedItem.count;
+    });
+    return loadedItems;
 }
 function loadItems(decodedBarcodes) {
     return decodedBarcodes.map((item) => {
@@ -37,7 +61,10 @@ function loadItems(decodedBarcodes) {
     });
 }
 function calculateReceipt(items) {
-    return calculateReceiptSavings(calculateReceiptTotal(calculateReceiptItems(items)));
+    const receiptItems = calculateReceiptItems(items);
+    const receipt = calculateReceiptTotal(receiptItems);
+
+    return calculateReceiptSavings(receipt);
 }
 function calculateReceiptSavings(receiptItems) {
     let TotalWithoutPromotion = 0;
@@ -55,7 +82,9 @@ function calculateReceiptTotal(receiptItems) {
     };
 }
 function calculateReceiptItems(items) {
-    items.forEach(item => { item.subtotal = item.price * item.count });
+    items.forEach(item => {
+        item.subtotal = item.price * item.count;
+    });
     return promoteReceiptItems(items);
 }
 function promoteReceiptItems(items) {
