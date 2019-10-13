@@ -15,7 +15,6 @@ function renderReceipt(receipt) {
         '**********************';
     return formattedReceipt;
 }
-
 function getFinalReceipt(receipt) {
     let displayFinalReceipt = "";
     receipt.receiptItems.forEach(items => {

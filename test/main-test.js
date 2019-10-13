@@ -232,4 +232,40 @@ describe('pos', () => {
 
     expect(result).toEqual(expected);
   });
+
+  it('should return formatted receipt when calculated receipt provided to renderReceipt', () => {
+    const receipt = {
+      receiptItems: [{
+        barcode: 'ITEM000001',
+        name: 'Sprite',
+        price: 3.00,
+        unit: 'bottle',
+        count: 3,
+        subtotal: 6.00
+      },
+      {
+        barcode: 'ITEM000002',
+        name: 'Apple',
+        price: 5.50,
+        unit: 'pound',
+        count: 2,
+        subtotal: 11.00
+      }],
+      total: 17.00,
+      savings: 3.00
+    };
+
+    const result = renderReceipt(receipt);
+
+    const expected =
+      '***<store earning no money>Receipt ***\n' +
+      'Name: Sprite, Quantity: 3 bottles, Unit: 3.00(yuan), Subtotal: 6.00(yuan)\n' +
+      'Name: Apple, Quantity: 2 pounds, Unit: 5.50(yuan), Subtotal: 11.00(yuan)\n' +
+      '----------------------\n' +
+      'Total: 17.00(yuan)\n' +
+      'Discounted prices: 3.00(yuan)\n' +
+      '**********************';
+
+    expect(result).toEqual(expected);
+  });
 });
