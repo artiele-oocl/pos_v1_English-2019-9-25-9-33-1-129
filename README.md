@@ -97,3 +97,10 @@ Discounted prices：4.00(yuan)
    ```
 
 4. You should learn and be good at using the Console feature in the developer tools that come with the popular browsers.
+
+## JASMINE FOR NODE.JS
+https://jasmine.github.io/pages/getting_started.html
+npm install --save-dev jasmine
+node node_modules/jasmine/bin/jasmine init
+"scripts": { "test": "jasmine" }
+npm test
