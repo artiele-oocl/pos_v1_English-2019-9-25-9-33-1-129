@@ -1,5 +1,4 @@
 'use strict';
-import { decodeBarcodes } from '../main/main';
 
 describe('pos', () => {
 

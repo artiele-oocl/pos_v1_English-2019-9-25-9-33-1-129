@@ -1,7 +1,8 @@
 'use strict';
-export { decodeBarcodes }; // a list of exported variables
 
-
+function decodeTags(tags) {
+    return combineItems(decodeBarcodes(tags));
+}
 function decodeBarcodes(tags) {
     let decodedBarcodes = [];
     tags.forEach(tag => {
@@ -22,4 +23,16 @@ function splitBarcodes(tag) {
         barcode,
         count: (count) ? parseFloat(count) : 1
     };
+}
+function combineItems(decodedBarcodes) {
+    return loadItems(decodedBarcodes)
+        .forEach(loadedItem => {
+            let decodedItemCount = decodedBarcodes.find(item => item.barcode === loadedItem.barcode);
+            loadedItem.count = decodedItemCount.count;
+        });
+}
+function loadItems(decodedBarcodes) {
+    return decodedBarcodes.map((item) => {
+        return loadAllItems().find(loadItem => item.barcode === loadItem.barcode);
+    });
 }
